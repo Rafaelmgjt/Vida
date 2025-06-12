@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Amor em Tempo Real</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .petal {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 30px;
+            height: 30px;
+            opacity: 0.7;
+            z-index: 10;
+            animation: falling linear infinite;
+        }
+        
+        @keyframes falling {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .polaroid {
+            background: white;
+            padding: 15px 15px 50px 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: rotate(3deg);
+            transition: transform 0.3s;
+            max-width: 330px;
+            max-height: 330px;
+        }
+        
+        .polaroid:nth-child(even) {
+            transform: rotate(-2deg);
+        }
+        
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 20;
+        }
+        
+        .polaroid-caption {
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Dancing Script', cursive;
+            color: #333;
+        }
+        
+        .message-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-cream-50 min-h-screen font-['Raleway'] overflow-x-hidden" style="--tw-bg-opacity: 1; background-color: rgb(253 246 236 / var(--tw-bg-opacity));">
+    
+    <!-- Floating petals container -->
+    <div id="petals-container"></div>
+    
+    <!-- Special message box -->
+    <div id="message-box" class="message-box">
+        <div class="bg-white rounded-xl p-8 max-w-md mx-auto shadow-2xl text-center">
+            <h2 id="message-title" class="text-3xl font-bold mb-4 text-pink-600"></h2>
+            <p id="message-content" class="text-gray-700 mb-6"></p>
+            <button onclick="closeMessage()" class="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">Fechar</button>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 font-['Playfair_Display']">Nossa Linha do Tempo</h1>
+            <p class="text-gray-600">Contando cada momento especial desde 20/12/2023</p>
+        </header>
+        
+        <!-- Counter -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-12 message-card" style="background-color: #faf5ed;">
+            <div class="text-center">
+                <h2 class="text-2xl text-gray-800 mb-6 font-semibold">Tempo juntos</h2>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+                    <div>
+                        <div class="text-4xl font-bold text-gray-900" id="years">0</div>
+                        <div class="text-gray-500">Anos</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-gray-800" id="months">0</div>
+                        <div class="text-gray-500">Meses</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-gray-800" id="days">0</div>
+                        <div class="text-gray-500">Dias</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-gray-800" id="hours">0</div>
+                        <div class="text-gray-500">Horas</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-gray-800" id="minutes">0</div>
+                        <div class="text-gray-500">Minutos</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-gray-800" id="seconds">0</div>
+                        <div class="text-gray-500">Segundos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Love Message -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-12 message-card">
+            <div class="text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/9292/9292036.png" alt="Heart" class="w-16 mx-auto mb-4">
+                <p class="text-gray-700 text-lg italic leading-relaxed">
+                    "Cada momento ao seu lado é como um suspiro tranquilo no meio do caos do mundo. Você me acalma, me inspira e me mostra que amar é construir, cuidar e crescer juntos. Não importa o tempo, a distância ou as dificuldades — meu coração sempre encontra o caminho de volta para você. Te amo por quem você é, e por tudo o que somos quando estamos juntos."
+                </p>
+            </div>
+        </div>
+        
+        <!-- Polaroid Gallery -->
+        <div class="mb-12">
+            <h2 class="text-3xl text-gray-800 mb-8 text-center font-['Playfair_Display']">Nossos Momentos</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
+                <!-- Polaroid 1 -->
+                <div class="polaroid">
+                    <img src="./src/IMG_1.jpeg" alt="Couple" class="w-full h-64 object-cover">
+                    <p class="polaroid-caption">Uma das nossas primeiras fotos juntos</p>
+                </div>
+                
+                <!-- Polaroid 2 -->
+                <div class="polaroid">
+                    <img src="./src/IMG_2.jpeg" alt="Romantic dinner" class="w-full h-64 object-cover">
+                    
+                </div>
+                
+                <!-- Polaroid 3 -->
+                <div class="polaroid">
+                    <img src="./src/IMG_3.jpeg" alt="Beach" class="w-full h-64 object-cover">
+                   
+                </div>
+                
+                <!-- Polaroid 4 -->
+                <div class="polaroid">
+                    <img src="./src/IMG_4.jpeg" alt="Sunset" class="w-full h-64 object-cover">
+                    
+                </div>
+                
+                <!-- Polaroid 5 -->
+                <div class="polaroid">
+                    <img src="./src/IMG_5.jpeg" alt="Breakfast" class="w-full h-64 object-cover">
+                    
+                </div>
+                
+                <!-- Polaroid 6 -->
+                <div class="polaroid">
+                    <img src="./src/IMG_6.jpeg" alt="Adventure" class="w-full h-64 object-cover">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const startDate = new Date('2023-12-20T22:00:00');
+        const valentinesDay = 6; // June (0-based month)
+        const valentinesDate = 12; // 12th
+        
+        // Elements
+        const yearsEl = document.getElementById('years');
+        const monthsEl = document.getElementById('months');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const messageBox = document.getElementById('message-box');
+        const messageTitle = document.getElementById('message-title');
+        const messageContent = document.getElementById('message-content');
+        
+        // Last shown dates for messages
+        let lastAnniversaryMonth = -1;
+        let lastAnniversaryYear = -1;
+        let lastValentinesYear = -1;
+        
+        // Update counter and check for special dates
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+            
+            // Calculate time units
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Update displays
+            yearsEl.textContent = years;
+            monthsEl.textContent = months;
+            daysEl.textContent = days;
+            hoursEl.textContent = hours;
+            minutesEl.textContent = minutes;
+            secondsEl.textContent = seconds;
+            
+            // Check for monthly anniversary (20th of each month)
+            if (now.getDate() === 20 && now.getMonth() !== lastAnniversaryMonth) {
+                lastAnniversaryMonth = now.getMonth();
+                showMessage('Feliz mêsversário!', 'Mais um mês de amor, risos e momentos inesquecíveis ao seu lado. Cada dia com você é um presente que eu guardo com carinho no coração.');
+                createPetals(50);
+            }
+            
+            // Check for yearly anniversary (20th December)
+            if (now.getDate() === 20 && now.getMonth() === 11 && now.getFullYear() > startDate.getFullYear() && now.getFullYear() !== lastAnniversaryYear) {
+                lastAnniversaryYear = now.getFullYear();
+                const anniversaryYears = now.getFullYear() - startDate.getFullYear();
+                showMessage('Feliz aniversário de namoro!', `Comemorando ${anniversaryYears} ${anniversaryYears === 1 ? 'ano' : 'anos'} de uma história linda escrita a quatro mãos. Você é o amor da minha vida!`);
+                createPetals(100);
+            }
+            
+            // Check for Valentine's Day (12th June)
+            if (now.getDate() === valentinesDate && now.getMonth() === valentinesDay && now.getFullYear() !== lastValentinesYear) {
+                lastValentinesYear = now.getFullYear();
+                showMessage('Feliz dia dos namorados!', 'Neste dia especial, quero lembrar que cada momento ao seu lado é único e precioso. Você é meu porto seguro, minha paixão e meu maior amor.');
+                createPetals(80);
+            }
+        }
+        
+        // Show message box
+        function showMessage(title, content) {
+            messageTitle.textContent = title;
+            messageContent.textContent = content;
+            messageBox.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close message box
+        function closeMessage() {
+            messageBox.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Test message function
+        function testMessage(type) {
+            switch(type) {
+                case 'month':
+                    showMessage('Feliz mêsversário!', 'Mais um mês de amor, risos e momentos inesquecíveis ao seu lado. Cada dia com você é um presente que eu guardo com carinho no coração.');
+                    createPetals(50);
+                    break;
+                case 'anniversary':
+                    const years = new Date().getFullYear() - startDate.getFullYear();
+                    showMessage('Feliz aniversário de namoro!', `Comemorando ${years} ${years === 1 ? 'ano' : 'anos'} de uma história linda escrita a quatro mãos. Você é o amor da minha vida!`);
+                    createPetals(100);
+                    break;
+                case 'valentine':
+                    showMessage('Feliz dia dos namorados!', 'Neste dia especial, quero lembrar que cada momento ao seu lado é único e precioso. Você é meu porto seguro, minha paixão e meu maior amor.');
+                    createPetals(80);
+                    break;
+            }
+        }
+        
+        // Create rose petals animation
+        function createPetals(count) {
+            const container = document.getElementById('petals-container');
+            container.innerHTML = '';
+            
+            const colors = ['#FFB6C1', '#FF69B4', '#DB7093', '#FFC0CB', '#FF9999'];
+            
+            for (let i = 0; i < count; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                
+                // Random properties
+                const size = Math.random() * 15 + 10;
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 10 + 5;
+                const delay = Math.random() * 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${left}%`;
+                petal.style.animationDuration = `${animationDuration}s`;
+                petal.style.animationDelay = `${delay}s`;
+                petal.style.backgroundImage = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='${encodeURIComponent(color)}' d='M50,25 C60,10 75,5 85,15 C95,25 90,40 75,50 C60,60 50,70 50,80 C50,70 40,60 25,50 C10,40 5,25 15,15 C25,5 40,10 50,25 Z'/%3E%3C/svg%3E")`;
+                
+                container.appendChild(petal);
+            }
+        }
+        
+        // Initialize
+        updateCounter();
+        setInterval(updateCounter, 1000); // Update every second
+        
+        // Create some petals initially
+        createPetals(20);
+    </script>
+</body>
+</html>
