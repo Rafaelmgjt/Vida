@@ -215,47 +215,55 @@
         
         // Update counter and check for special dates
         function updateCounter() {
-            const now = new Date();
-            const diff = now - startDate;
-            
-            // Calculate time units
-            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
-            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            // Update displays
-            yearsEl.textContent = years;
-            monthsEl.textContent = months;
-            daysEl.textContent = days;
-            hoursEl.textContent = hours;
-            minutesEl.textContent = minutes;
-            secondsEl.textContent = seconds;
-            
-            // Check for monthly anniversary (20th of each month)
-            if (now.getDate() === 20 && now.getMonth() !== lastAnniversaryMonth) {
-                lastAnniversaryMonth = now.getMonth();
-                showMessage('Feliz mêsversário!', 'Mais um mês de amor, risos e momentos inesquecíveis ao seu lado. Cada dia com você é um presente que eu guardo com carinho no coração.');
-                createPetals(50);
-            }
-            
-            // Check for yearly anniversary (20th December)
-            if (now.getDate() === 20 && now.getMonth() === 11 && now.getFullYear() > startDate.getFullYear() && now.getFullYear() !== lastAnniversaryYear) {
-                lastAnniversaryYear = now.getFullYear();
-                const anniversaryYears = now.getFullYear() - startDate.getFullYear();
-                showMessage('Feliz aniversário de namoro!', `Comemorando ${anniversaryYears} ${anniversaryYears === 1 ? 'ano' : 'anos'} de uma história linda escrita a quatro mãos. Você é o amor da minha vida!`);
-                createPetals(100);
-            }
-            
-            // Check for Valentine's Day (12th June)
-            if (now.getDate() === valentinesDate && now.getMonth() === valentinesDay && now.getFullYear() !== lastValentinesYear) {
-                lastValentinesYear = now.getFullYear();
-                showMessage('Feliz dia dos namorados!', 'Neste dia especial, quero lembrar que cada momento ao seu lado é único e precioso. Você é meu porto seguro, minha paixão e meu maior amor.');
-                createPetals(80);
-            }
+    const now = new Date();
+    const diff = now - startDate;
+
+    // Cálculo do tempo
+    const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+    const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30.44));
+    const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    yearsEl.textContent = years;
+    monthsEl.textContent = months;
+    daysEl.textContent = days;
+    hoursEl.textContent = hours;
+    minutesEl.textContent = minutes;
+    secondsEl.textContent = seconds;
+
+    // Gatilho: 20 de cada mês (mêsversário)
+    const today = new Date(now.getFullYear(), now.getMonth(), 20);
+    if (now >= today && now - today < 1000 * 60 * 60 * 24) {
+        if (lastAnniversaryMonth !== now.getMonth()) {
+            lastAnniversaryMonth = now.getMonth();
+            showMessage('Feliz mêsversário!', 'Mais um mês de amor, risos e momentos inesquecíveis ao seu lado. Cada dia com você é um presente que eu guardo com carinho no coração.');
+            createPetals(50);
         }
+    }
+
+    // Gatilho: 20 de dezembro (aniversário)
+    const thisYearAnniv = new Date(now.getFullYear(), 11, 20);
+    if (now >= thisYearAnniv && now - thisYearAnniv < 1000 * 60 * 60 * 24) {
+        if (lastAnniversaryYear !== now.getFullYear()) {
+            lastAnniversaryYear = now.getFullYear();
+            const anniversaryYears = now.getFullYear() - startDate.getFullYear();
+            showMessage('Feliz aniversário de namoro!', `Comemorando ${anniversaryYears} ${anniversaryYears === 1 ? 'ano' : 'anos'} de uma história linda escrita a quatro mãos. Você é o amor da minha vida!`);
+            createPetals(100);
+        }
+    }
+
+    // Gatilho: 12 de junho (Dia dos Namorados)
+    const valentines = new Date(now.getFullYear(), valentinesDay, valentinesDate);
+    if (now >= valentines && now - valentines < 1000 * 60 * 60 * 24) {
+        if (lastValentinesYear !== now.getFullYear()) {
+            lastValentinesYear = now.getFullYear();
+            showMessage('Feliz dia dos namorados!', 'Neste dia especial, quero lembrar que cada momento ao seu lado é único e precioso. Você é meu porto seguro, minha paixão e meu maior amor.');
+            createPetals(80);
+        }
+    }
+}
         
         // Show message box
         function showMessage(title, content) {
