@@ -37,7 +37,7 @@
         
         .polaroid {
             background: white;
-            padding: 15px 15px 50px 15px;
+            padding: 15px 15px 50px 30px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             transform: rotate(3deg);
             transition: transform 0.3s;
@@ -155,7 +155,7 @@
                 <!-- Polaroid 1 -->
                 <div class="polaroid">
                     <img src="./IMG_1.jpeg" alt="Couple" class="w-full h-64 object-cover">
-                    <p class="polaroid-caption">Uma das nossas primeiras fotos juntos</p>
+                    
                 </div>
                 
                 <!-- Polaroid 2 -->
@@ -269,25 +269,6 @@
         function closeMessage() {
             messageBox.style.display = 'none';
             document.body.style.overflow = 'auto';
-        }
-
-        // Test message function
-        function testMessage(type) {
-            switch(type) {
-                case 'month':
-                    showMessage('Feliz mêsversário!', 'Mais um mês de amor, risos e momentos inesquecíveis ao seu lado. Cada dia com você é um presente que eu guardo com carinho no coração.');
-                    createPetals(50);
-                    break;
-                case 'anniversary':
-                    const years = new Date().getFullYear() - startDate.getFullYear();
-                    showMessage('Feliz aniversário de namoro!', `Comemorando ${years} ${years === 1 ? 'ano' : 'anos'} de uma história linda escrita a quatro mãos. Você é o amor da minha vida!`);
-                    createPetals(100);
-                    break;
-                case 'valentine':
-                    showMessage('Feliz dia dos namorados!', 'Neste dia especial, quero lembrar que cada momento ao seu lado é único e precioso. Você é meu porto seguro, minha paixão e meu maior amor.');
-                    createPetals(80);
-                    break;
-            }
         }
         
         // Create rose petals animation
